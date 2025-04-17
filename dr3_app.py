@@ -39,13 +39,20 @@ if user_input:
         response = "You seem neutral. Let's see how we can make today better."
 
     # GPT response
-    if mood != 1:
-        gpt_response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"User: {user_input}\nBot:",
-            max_tokens=150
-        )
-        response = gpt_response.choices[0].text.strip()
+import openai
+import streamlit as st
+
+# Retrieve the API key from Streamlit secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+
+# Now you can call the OpenAI API as usual
+response = openai.Completion.create(
+    model="text-davinci-003",
+    prompt="Hello, how are you?",
+    max_tokens=100
+)
+
+print(response.choices[0].text.strip())
 
     st.session_state['history'].append((user_input, response))
     st.write(f"Bot: {response}")
